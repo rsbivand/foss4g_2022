@@ -1,0 +1,37 @@
+---
+title: "Modernizing the R-GRASS interface: confronting barn-raised OSGeo libraries and the evolving R.*spatial package ecosystem"
+author: "Roger Bivand"
+date: "Monday 22 August 2022, 16:15-18:15"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    toc_depth: 2
+theme: united
+bibliography: foss4g22.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, paged.print=FALSE)
+```
+
+### Copyright
+
+All the material presented here, to the extent it is original, is available under [CC-BY-SA](https://creativecommons.org/licenses/by-sa/4.0/). 
+
+### Required current contributed CRAN packages:
+
+I am running R 4.1.2, with recent `update.packages()`.
+
+```{r, echo=TRUE}
+needed <- c()
+```
+
+### Script
+
+Script and data at https://github.com/rsbivand/foss4g_2022/raw/main/modernizing_220822.zip. Download to suitable location, unzip and use as basis.
+
+
