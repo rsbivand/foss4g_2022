@@ -24,7 +24,7 @@ All the material presented here, to the extent it is original, is available unde
 
 ### Required current contributed CRAN packages:
 
-I am running R 4.1.2, with recent `update.packages()`.
+I am running R 4.2.1, with recent `update.packages()`.
 
 ```{r, echo=TRUE}
 needed <- c()
