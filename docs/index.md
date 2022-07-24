@@ -7,7 +7,7 @@ output:
 theme: united
 ---
 
-### [workshop document](https://rsbivand.github.io/foss4g_2022/modernizing_220822.html)
+### [Workshop document](https://rsbivand.github.io/foss4g_2022/modernizing_220822.html)
 
 
 Installing packages not yet on your system:
