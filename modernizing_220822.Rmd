@@ -89,7 +89,7 @@ The versions of these metadata files may differ from those bundled with other bi
 
 ### Addressing barn-raising in R packages
 
-@bivand:21 describes the steps taken to modernize **rgdal** as a useful place to prototype adaptations. For vector data, the **sf** simple features package is strongly recommended for new work, while for vector and raster spatial and spatio-temporal arrays, **stars** may be used. Both of these are part of the informal `r-spatial` GitHub organization (https://r-spatial.org, https://github.com/r-spatial). **sf** links to PROJ, GDAL and GEOS, so is able to replace **rgdal** and **rgeos**. **rgdal** perhaps uses PROJ directly rather than PROJ through GDAL, but most of what was learned about changes in PROJ and GDAL is shared.
+@bivand:21 describes the steps taken to modernize **rgdal** as a useful place to prototype adaptations - see also @bivand:22. For vector data, the **sf** simple features package is strongly recommended for new work, while for vector and raster spatial and spatio-temporal arrays, **stars** may be used. Both of these are part of the informal `r-spatial` GitHub organization (https://r-spatial.org, https://github.com/r-spatial). **sf** links to PROJ, GDAL and GEOS, so is able to replace **rgdal** and **rgeos**. **rgdal** perhaps uses PROJ directly rather than PROJ through GDAL, but most of what was learned about changes in PROJ and GDAL is shared.
 
 In addition, **rgdal** had been used extensively by the **raster** package, which itself did not link to external software libraries. **raster** is being re-implemented in the **terra** package, which is now almost complete. **terra**, like **sf**, links to PROJ, GDAL and GEOS, so provides the same file handling functionality as **rgdal** with regard to the R-GRASS interface, but for both vector and raster objects. **rgdal**, **sf** and **terra** can use the WKT2 (2019) CRS representation.
 
@@ -647,6 +647,70 @@ deaths1$b_nearer <- deaths1$broad < deaths1$not_broad
 by(deaths1$Num_Css, deaths1$b_nearer, sum)
 ```
 
+### Just with **terra**?
+
+In https://rsbivand.github.io/geomed19-workshop/Geomed19_II.html, it was shown that **raster** and **gdistance** could be used to analyze the same problem. Times have moved on, so let's try **terra**, first buffering the roads out by 4m (buildings in by 4m):
+
+```{r}
+buildings_4 <- buffer(buildings, width=-4)
+```
+
+Next we rasterize the negative buffered buildings using `bbo-r` created above:
+
+```{r}
+buildings_4_r <- rasterize(buildings_4, bbo_r, field="cat")
+```
+
+and recode the values to set the negative buffered buildings to a large value and the roads to the value of the resolution:
+
+```{r}
+values(buildings_4_r)[!is.na(values(buildings_4_r))] <- 99999
+values(buildings_4_r)[is.na(values(buildings_4_r))] <- 1
+```
+
+Next, rasterize the pump locations to the same resolution template:
+
+```{r}
+b_pump_r <- rasterize(b_pump, bbo_r, field="cat")
+nb_pump_r <- rasterize(nb_pump, bbo_r, field="cat")
+```
+
+Copy the recoded negative buffered buildings raster, and overwrite with the location of the Broad Street pump set to zero, then run `costDistance()`:
+
+```{r}
+b_buildings_4_r <- buildings_4_r
+values(b_buildings_4_r)[which(values(b_pump_r) == 1)] <- 0
+res_b <- costDistance(b_buildings_4_r, target=0)
+```
+
+Repeat for the non-Broad Street pumps:
+
+```{r}
+nb_buildings_4_r <- buildings_4_r
+values(nb_buildings_4_r)[which(values(nb_pump_r) > 0)] <- 0
+res_nb <- costDistance(nb_buildings_4_r, target=0)
+```
+
+Extract the distances to the Broad Street and nearest non-Broad Street pumps by the locations of the front doors of houses where deaths were registered:
+
+```{r}
+b_deaths <- extract(res_b, deaths)
+nb_deaths <- extract(res_nb, deaths)
+```
+
+Find, for each such address, whether the Broad Street pump was nearer or not:
+
+```{r}
+broad_nearer <- b_deaths$cat < nb_deaths$cat
+```
+
+Sum how many deaths occurred for addresses for which the Broad Street pump was nearer or not:
+
+```{r}
+by(deaths$Num_Css, broad_nearer, sum)
+```
+
+The outcome is the same as the analysis above using GRASS.
 
 ## Open questions
 

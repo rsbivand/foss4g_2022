@@ -1,8 +1,12 @@
+## ----setup, include=FALSE---------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE, paged.print=FALSE)
+
+
 ## ---- echo=TRUE-------------------------------------------------------------
 needed <- c("rgrass", "XML", "raster", "stars", "abind", "sp", "sf", "terra")
 
 
-## ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
 library("terra")
 
 
@@ -138,7 +142,6 @@ points(nb_pump, pch=1, col="blue", cex=1.5)
 
 ## ---------------------------------------------------------------------------
 Sys.setenv("GRASS_INSTALLATION"="/home/rsb/topics/grass/g820/grass82")
-# replace with correct value for platform
 library(rgrass)
 GRASS_INSTALLATION <- Sys.getenv("GRASS_INSTALLATION")
 file.info(GRASS_INSTALLATION)$isdir[1]
@@ -199,6 +202,49 @@ deaths1$b_nearer <- deaths1$broad < deaths1$not_broad
 
 ## ---------------------------------------------------------------------------
 by(deaths1$Num_Css, deaths1$b_nearer, sum)
+
+
+## ---------------------------------------------------------------------------
+buildings_4 <- buffer(buildings, width=-4)
+
+
+## ---------------------------------------------------------------------------
+buildings_4_r <- rasterize(buildings_4, bbo_r, field="cat")
+
+
+## ---------------------------------------------------------------------------
+values(buildings_4_r)[!is.na(values(buildings_4_r))] <- 99999
+values(buildings_4_r)[is.na(values(buildings_4_r))] <- 1
+
+
+## ---------------------------------------------------------------------------
+b_pump_r <- rasterize(b_pump, bbo_r, field="cat")
+nb_pump_r <- rasterize(nb_pump, bbo_r, field="cat")
+
+
+## ---------------------------------------------------------------------------
+b_buildings_4_r <- buildings_4_r
+values(b_buildings_4_r)[which(values(b_pump_r) == 1)] <- 0
+res_b <- costDistance(b_buildings_4_r, target=0)
+
+
+## ---------------------------------------------------------------------------
+nb_buildings_4_r <- buildings_4_r
+values(nb_buildings_4_r)[which(values(nb_pump_r) > 0)] <- 0
+res_nb <- costDistance(nb_buildings_4_r, target=0)
+
+
+## ---------------------------------------------------------------------------
+b_deaths <- extract(res_b, deaths)
+nb_deaths <- extract(res_nb, deaths)
+
+
+## ---------------------------------------------------------------------------
+broad_nearer <- b_deaths$cat < nb_deaths$cat
+
+
+## ---------------------------------------------------------------------------
+by(deaths$Num_Css, broad_nearer, sum)
 
 
 ## ---------------------------------------------------------------------------
