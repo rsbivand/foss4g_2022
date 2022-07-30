@@ -12,8 +12,14 @@ b_pump_sf <- st_read(bp_file)
 b_pump_sf_ll <- st_transform(b_pump_sf, "OGC:CRS84")
 st_geometry(b_pump_sf_ll)
 list.files(sf_proj_search_paths()[1])
-# with POINT (-0.1366876 51.5133)
-# without POINT (-0.1367127 51.5133)
+o <- sf_proj_pipelines(st_crs(b_pump_sf), "OGC:CRS84")
+as.data.frame(o[, c(5, 8)])
+for (p in o$definition[c(1, 8, 9)]) cat(gsub("\\+step", "\n  +step", p), "\n\n")
+st_geometry(st_transform(b_pump_sf, "OGC:CRS84", pipeline=o$definition[1]))
+st_geometry(st_transform(b_pump_sf, "OGC:CRS84", pipeline=o$definition[9]))
+if (sf_proj_network()) st_geometry(st_transform(b_pump_sf, "OGC:CRS84", pipeline=o$definition[8]))
+# with network POINT (-0.1366876 51.5133)
+# without network POINT (-0.1367127 51.5133)
 
 # for transformation grid, set before package loaded
 td <- tempfile()
@@ -27,6 +33,6 @@ b_pump_sv <- vect(bp_file)
 b_pump_sv_ll <- project(b_pump_sv, "OGC:CRS84")
 list.files(td)
 geom(b_pump_sv_ll)
-# with  -0.1366876 51.5133
-# without  -0.1367127 51.5133
+# with network  -0.1366876 51.5133
+# without network  -0.1367127 51.5133
 
