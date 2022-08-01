@@ -24,15 +24,31 @@ All the material presented here, to the extent it is original, is available unde
 
 ### Required current contributed CRAN packages:
 
-I am running R 4.2.1, with recent `update.packages()`.
+I am running GRASS 8.2.0 and R 4.2.1, with recent `update.packages()`. Please install a recent GRASS https://grass.osgeo.org/download and a recent R https://cran.r-project.org/ before reaching Florence. 
 
 ```{r, echo=TRUE}
 needed <- c("rgrass", "XML", "raster", "stars", "abind", "sp", "sf", "terra")
 ```
 
+```{r, eval=FALSE}
+inst <- match(needed, .packages(all=TRUE))
+need <- which(is.na(inst))
+if (length(need) > 0) install.packages(needed[need])
+```
+
+I will try to ensure that a CRAN macOS M1 binary of **rgrass** is available before we meet, source install on M! works, but a vignette is broken.
+
 ### Script
 
 Script and data at https://github.com/rsbivand/foss4g_2022/raw/main/modernizing_220822.zip. Download to suitable location, unzip and use as basis.
+
+### Testing installation
+
+Download and unzip the data and scripts, and, after editing the string containing the GRASS installation `GISBASE`, try to run:
+
+```{r, eval=FALSE}
+source("modernizing_220822.R", echo=TRUE)
+```
 
 ## FOSS foundations and barn-raising
 

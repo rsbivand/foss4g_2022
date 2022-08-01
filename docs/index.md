@@ -10,10 +10,3 @@ theme: united
 ### [Workshop document](https://rsbivand.github.io/foss4g_2022/modernizing_220822.html)
 
 
-Installing packages not yet on your system:
-
-```
-inst <- match(needed, .packages(all=TRUE))
-need <- which(is.na(inst))
-if (length(need) > 0) install.packages(needed[need])
-```

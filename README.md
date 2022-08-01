@@ -8,7 +8,7 @@ We'll show different ways to connect R and GRASS, and different ways to read and
 
 Examples will include using GRASS GIS functionality to extend what is feasible in R alone when handling and analysing spatial data, and using R as an alternative to Python for scripting GRASS GIS commands.
 
-Information on the versions of GRASS, R and R packages which should be installed on participants' computers will be provided, together with a simple test to check that installation has succeeded. Data sets will also be provided. Files will be made available from https://rsbivand.github.io/foss4g_2022. 
+Information on the versions of GRASS, R and R packages which should be installed on participants' computers will be provided, together with a simple test to check that installation has succeeded. Participant's computers should have recent GRASS and R pre-installed, and the instructions at the start of the online workshop document should be followed before reaching Florence. Data sets and code will also be provided linked from the workshop document. Files will be made available from the workshop document on https://rsbivand.github.io/foss4g_2022.
 
 Some knowledge of R and GRASS will be helpful as in a short format it is not possible to start from the beginnings.
 
