@@ -285,12 +285,13 @@ div.tocify {
 </div>
 <div id="required-current-contributed-cran-packages" class="section level3">
 <h3>Required current contributed CRAN packages:</h3>
-<p>I am running GRASS 8.2.0 and R 4.2.1, with recent <code>update.packages()</code>. Please install a recent GRASS <a href="https://grass.osgeo.org/download" class="uri">https://grass.osgeo.org/download</a> and a recent R <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> before reaching Florence.</p>
+<p>I am running GRASS 8.2.0 and R 4.2.1, with recent <code>update.packages()</code>. Please install a recent GRASS <a href="https://grass.osgeo.org/download" class="uri">https://grass.osgeo.org/download</a> and a recent R <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a> before reaching Florence. The CRAN contributed packages used are:</p>
 <pre class="r"><code>needed &lt;- c(&quot;rgrass&quot;, &quot;XML&quot;, &quot;raster&quot;, &quot;stars&quot;, &quot;abind&quot;, &quot;sp&quot;, &quot;sf&quot;, &quot;terra&quot;)</code></pre>
+<p>and may be installed when online using this code (you will be asked which repository to access):</p>
 <pre class="r"><code>inst &lt;- match(needed, .packages(all=TRUE))
 need &lt;- which(is.na(inst))
 if (length(need) &gt; 0) install.packages(needed[need])</code></pre>
-<p>I will try to ensure that a CRAN macOS M1 binary of <strong>rgrass</strong> is available before we meet, source install on M! works, but a vignette is broken.</p>
+<p>I will try to ensure that a CRAN macOS M1 binary of <strong>rgrass</strong> is available before we meet, a vignette in 0.3-2 was broken by the absence of <strong>stars</strong> on that platform when the CRAN check was done. 0.3-3 has been submitted with the vignette logic error fixed.</p>
 </div>
 <div id="script" class="section level3">
 <h3>Script</h3>
@@ -535,7 +536,7 @@ soils</code></pre>
 <p>These changes mean that users transferring data between R and GRASS will need to coerce between <strong>terra</strong> classes <code>SpatVector</code> and <code>SpatRaster</code> and the class system of choice. In addition, <code>SpatRaster</code> is only read into memory from file when this is required, so requiring some care.</p>
 <p>On loading and attaching, <strong>terra</strong> displays its version:</p>
 <pre class="r"><code>library(&quot;terra&quot;)</code></pre>
-<pre><code>## terra 1.5.49</code></pre>
+<pre><code>## terra 1.6.7</code></pre>
 <p>This description is constructed conditioning on the availability of suggested packages. <code>terra::gdal()</code> tells us the versions of the external libraries being used by <strong>terra</strong>:</p>
 <pre class="r"><code>gdal(lib=&quot;all&quot;)</code></pre>
 <pre><code>##     gdal     proj     geos 
@@ -779,7 +780,7 @@ terra::writeRaster(r, filename=tf, filetype=&quot;RRASTER&quot;)</code></pre>
 ## resolution : 0.008333333, 0.008333333  (x, y)
 ## extent     : 5.741667, 6.533333, 49.44167, 50.19167  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : file3cab62553d77.grd 
+## source     : file20f522211dbec.grd 
 ## names      : elevation 
 ## values     : 0, 547  (min, max)</code></pre>
 <p>This object (held on file rather than in memory) can be round-tripped:</p>
@@ -789,7 +790,7 @@ terra::writeRaster(r, filename=tf, filetype=&quot;RRASTER&quot;)</code></pre>
 ## resolution  : 0.008333333, 0.008333333  (x, y)
 ## extent      : 5.741667, 6.533333, 49.44167, 50.19167  (xmin, xmax, ymin, ymax)
 ## coord. ref. : +proj=longlat +datum=WGS84 +no_defs 
-## source      : file3cab62553d77.grd 
+## source      : file20f522211dbec.grd 
 ## name        : elevation 
 ## min value   :         0 
 ## max value   :       547</code></pre>
@@ -852,14 +853,14 @@ file.info(GRASS_INSTALLATION)$isdir[1]</code></pre>
 <p>We also need a place to put the temporary GRASS location:</p>
 <pre class="r"><code>td &lt;- tempdir()
 td</code></pre>
-<pre><code>## [1] &quot;/tmp/RtmpfumJOh&quot;</code></pre>
+<pre><code>## [1] &quot;/tmp/RtmpJ4q9c7&quot;</code></pre>
 <p>Here we need the three objects we have already created, and also set <code>override=TRUE</code>, as this document may be run many times. <code>initGRASS()</code> looks for an environment variable that GRASS sessions set (<code>GISRC</code>) pointing to a file of GRASS environment variables. Real GRASS sessions remove it on exit, but this interface does not (yet) provide for its removal, hence the need here to override.</p>
 <p>With <strong>rgrass</strong> and using a <code>&quot;SpatRaster&quot;</code> object <code>bbo_r</code> to set up the GRASS location, we can set the projection, extent and resolution much more easily than in previous versions of the interface:</p>
 <pre class="r"><code>soho &lt;- initGRASS(gisBase=GRASS_INSTALLATION, home=td, SG=bbo_r, override=TRUE)
 soho</code></pre>
-<pre><code>## gisdbase    /tmp/RtmpfumJOh 
-## location    file3cab718c0cce 
-## mapset      file3cab76b16953 
+<pre><code>## gisdbase    /tmp/RtmpJ4q9c7 
+## location    file20f527c6b62e0 
+## mapset      file20f521ef0d203 
 ## rows        858 
 ## columns     918 
 ## north       181415.9 
@@ -911,23 +912,23 @@ soho</code></pre>
 <pre class="r"><code>fl &lt;- c(&quot;overwrite&quot;, &quot;quiet&quot;)
 write_VECT(bbo, vname=&quot;bbo&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpfumJOh/file3cab427806cb.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f52e3773a3.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(buildings[,1], vname=&quot;buildings&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpfumJOh/file3cab6832201c.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f526e6672c6.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(b_pump, vname=&quot;b_pump&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpfumJOh/file3cab77140455.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f521ea03b18.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(nb_pump, vname=&quot;nb_pump&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpfumJOh/file3cab26516471.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f52317c9d37.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(deaths, vname=&quot;deaths&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpfumJOh/file3cab28bc485c.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f527a10d728.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>execGRASS(&quot;g.list&quot;, type=&quot;vector&quot;, intern=TRUE)</code></pre>
 <pre><code>## [1] &quot;b_pump&quot;    &quot;bbo&quot;       &quot;buildings&quot; &quot;deaths&quot;    &quot;nb_pump&quot;</code></pre>
@@ -1040,8 +1041,8 @@ nb_deaths &lt;- extract(res_nb, deaths)</code></pre>
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] rgrass_0.3-2  XML_3.99-0.10 raster_3.5-21 stars_0.5-6   abind_1.4-5  
-## [6] sp_1.5-1      sf_1.0-8      terra_1.5-49 
+## [1] rgrass_0.3-3  XML_3.99-0.10 raster_3.5-21 stars_0.5-6   abind_1.4-5  
+## [6] sp_1.5-1      sf_1.0-8      terra_1.6-7  
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.9         pillar_1.8.0       bslib_0.4.0        compiler_4.2.1    

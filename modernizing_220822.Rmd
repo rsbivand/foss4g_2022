@@ -24,11 +24,13 @@ All the material presented here, to the extent it is original, is available unde
 
 ### Required current contributed CRAN packages:
 
-I am running GRASS 8.2.0 and R 4.2.1, with recent `update.packages()`. Please install a recent GRASS https://grass.osgeo.org/download and a recent R https://cran.r-project.org/ before reaching Florence. 
+I am running GRASS 8.2.0 and R 4.2.1, with recent `update.packages()`. Please install a recent GRASS https://grass.osgeo.org/download and a recent R https://cran.r-project.org/ before reaching Florence. The CRAN contributed packages used are:
 
 ```{r, echo=TRUE}
 needed <- c("rgrass", "XML", "raster", "stars", "abind", "sp", "sf", "terra")
 ```
+
+and may be installed when online using this code (you will be asked which repository to access):
 
 ```{r, eval=FALSE}
 inst <- match(needed, .packages(all=TRUE))
@@ -36,7 +38,7 @@ need <- which(is.na(inst))
 if (length(need) > 0) install.packages(needed[need])
 ```
 
-I will try to ensure that a CRAN macOS M1 binary of **rgrass** is available before we meet, source install on M! works, but a vignette is broken.
+I will try to ensure that a CRAN macOS M1 binary of **rgrass** is available before we meet, a vignette in 0.3-2 was broken by the absence of **stars** on that platform when the CRAN check was done. 0.3-3 has been submitted with the vignette logic error fixed.
 
 ### Script
 
