@@ -38,7 +38,6 @@ need <- which(is.na(inst))
 if (length(need) > 0) install.packages(needed[need])
 ```
 
-I will try to ensure that a CRAN macOS M1 binary of **rgrass** is available before we meet, a vignette in 0.3-2 was broken by the absence of **stars** on that platform when the CRAN check was done. 0.3-3 has been submitted with the vignette logic error fixed.
 
 ### Script
 

@@ -291,7 +291,6 @@ div.tocify {
 <pre class="r"><code>inst &lt;- match(needed, .packages(all=TRUE))
 need &lt;- which(is.na(inst))
 if (length(need) &gt; 0) install.packages(needed[need])</code></pre>
-<p>I will try to ensure that a CRAN macOS M1 binary of <strong>rgrass</strong> is available before we meet, a vignette in 0.3-2 was broken by the absence of <strong>stars</strong> on that platform when the CRAN check was done. 0.3-3 has been submitted with the vignette logic error fixed.</p>
 </div>
 <div id="script" class="section level3">
 <h3>Script</h3>
@@ -780,7 +779,7 @@ terra::writeRaster(r, filename=tf, filetype=&quot;RRASTER&quot;)</code></pre>
 ## resolution : 0.008333333, 0.008333333  (x, y)
 ## extent     : 5.741667, 6.533333, 49.44167, 50.19167  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +no_defs 
-## source     : file20f522211dbec.grd 
+## source     : filebbaa21ad5f5d0.grd 
 ## names      : elevation 
 ## values     : 0, 547  (min, max)</code></pre>
 <p>This object (held on file rather than in memory) can be round-tripped:</p>
@@ -790,7 +789,7 @@ terra::writeRaster(r, filename=tf, filetype=&quot;RRASTER&quot;)</code></pre>
 ## resolution  : 0.008333333, 0.008333333  (x, y)
 ## extent      : 5.741667, 6.533333, 49.44167, 50.19167  (xmin, xmax, ymin, ymax)
 ## coord. ref. : +proj=longlat +datum=WGS84 +no_defs 
-## source      : file20f522211dbec.grd 
+## source      : filebbaa21ad5f5d0.grd 
 ## name        : elevation 
 ## min value   :         0 
 ## max value   :       547</code></pre>
@@ -853,14 +852,14 @@ file.info(GRASS_INSTALLATION)$isdir[1]</code></pre>
 <p>We also need a place to put the temporary GRASS location:</p>
 <pre class="r"><code>td &lt;- tempdir()
 td</code></pre>
-<pre><code>## [1] &quot;/tmp/RtmpJ4q9c7&quot;</code></pre>
+<pre><code>## [1] &quot;/tmp/RtmpkgFKr9&quot;</code></pre>
 <p>Here we need the three objects we have already created, and also set <code>override=TRUE</code>, as this document may be run many times. <code>initGRASS()</code> looks for an environment variable that GRASS sessions set (<code>GISRC</code>) pointing to a file of GRASS environment variables. Real GRASS sessions remove it on exit, but this interface does not (yet) provide for its removal, hence the need here to override.</p>
 <p>With <strong>rgrass</strong> and using a <code>&quot;SpatRaster&quot;</code> object <code>bbo_r</code> to set up the GRASS location, we can set the projection, extent and resolution much more easily than in previous versions of the interface:</p>
 <pre class="r"><code>soho &lt;- initGRASS(gisBase=GRASS_INSTALLATION, home=td, SG=bbo_r, override=TRUE)
 soho</code></pre>
-<pre><code>## gisdbase    /tmp/RtmpJ4q9c7 
-## location    file20f527c6b62e0 
-## mapset      file20f521ef0d203 
+<pre><code>## gisdbase    /tmp/RtmpkgFKr9 
+## location    filebbaa25c74d1df 
+## mapset      filebbaa245c19e05 
 ## rows        858 
 ## columns     918 
 ## north       181415.9 
@@ -912,23 +911,23 @@ soho</code></pre>
 <pre class="r"><code>fl &lt;- c(&quot;overwrite&quot;, &quot;quiet&quot;)
 write_VECT(bbo, vname=&quot;bbo&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f52e3773a3.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpkgFKr9/filebbaa22306ec79.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(buildings[,1], vname=&quot;buildings&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f526e6672c6.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpkgFKr9/filebbaa223a8aa8f.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(b_pump, vname=&quot;b_pump&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f521ea03b18.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpkgFKr9/filebbaa2a0b7439.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(nb_pump, vname=&quot;nb_pump&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f52317c9d37.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpkgFKr9/filebbaa29e0d609.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>write_VECT(deaths, vname=&quot;deaths&quot;, flags=fl)</code></pre>
 <pre><code>## Warning in x@ptr$write(filename, layer, filetype, insert[1], overwrite[1], :
-## GDAL Message 6: dataset /tmp/RtmpJ4q9c7/file20f527a10d728.gpkg does not support
+## GDAL Message 6: dataset /tmp/RtmpkgFKr9/filebbaa25c9a2c2f.gpkg does not support
 ## layer creation option ENCODING</code></pre>
 <pre class="r"><code>execGRASS(&quot;g.list&quot;, type=&quot;vector&quot;, intern=TRUE)</code></pre>
 <pre><code>## [1] &quot;b_pump&quot;    &quot;bbo&quot;       &quot;buildings&quot; &quot;deaths&quot;    &quot;nb_pump&quot;</code></pre>
@@ -1048,9 +1047,9 @@ nb_deaths &lt;- extract(res_nb, deaths)</code></pre>
 ##  [1] Rcpp_1.0.9         pillar_1.8.0       bslib_0.4.0        compiler_4.2.1    
 ##  [5] jquerylib_0.1.4    highr_0.9          class_7.3-20       tools_4.2.1       
 ##  [9] digest_0.6.29      lattice_0.20-45    tibble_3.1.8       jsonlite_1.8.0    
-## [13] evaluate_0.15      lifecycle_1.0.1    pkgconfig_2.0.3    rlang_1.0.4       
+## [13] evaluate_0.16      lifecycle_1.0.1    pkgconfig_2.0.3    rlang_1.0.4       
 ## [17] DBI_1.1.3          cli_3.3.0          rstudioapi_0.13    parallel_4.2.1    
-## [21] yaml_2.3.5         xfun_0.31          fastmap_1.1.0      e1071_1.7-11      
+## [21] yaml_2.3.5         xfun_0.32          fastmap_1.1.0      e1071_1.7-11      
 ## [25] stringr_1.4.0      dplyr_1.0.9        knitr_1.39         generics_0.1.3    
 ## [29] sass_0.4.2         vctrs_0.4.1        tidyselect_1.1.2   classInt_0.4-7    
 ## [33] grid_4.2.1         glue_1.6.2         R6_2.5.1           fansi_1.0.3       
