@@ -672,7 +672,7 @@ In https://rsbivand.github.io/geomed19-workshop/Geomed19_II.html, it was shown t
 buildings_4 <- buffer(buildings, width=-4)
 ```
 
-Next we rasterize the negative buffered buildings using `bbo-r` created above:
+Next we rasterize the negative buffered buildings using `bbo_r` created above:
 
 ```{r}
 buildings_4_r <- rasterize(buildings_4, bbo_r, field="cat")
@@ -731,7 +731,7 @@ The outcome is the same as the analysis above using GRASS.
 
 ## Open questions
 
-There are clearly numerous, and hopefully this session will both define others, and maybe recruit contributors to ones already identified.
+There are clearly numerous questions, and hopefully this session will both define others, and maybe recruit contributors to ones already identified.
 
 ### Continuous integration testing
 
