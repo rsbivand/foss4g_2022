@@ -138,7 +138,7 @@ If the user is not careful, and if the underlying version of PROJ or GDAL is upg
 
 ## Introduction to the interface
 
-The original R-GRASS interface [@bivand:00; @neteler+mitasova:08] was written mainly to permit R objects represented as **sp** class objects to be moved to GRASS, and GRASS objects to be moved to R for statistical analysis. From **spgrass6** 0.6-3 (April 2009) following a fruitful workshop at Queen's University, Belfast, the interface was re-written to use the `--interface-description` flag provided for each GRASS command, also used by the Python interface to GRASS commands. Command interface descriptions are parsed from XML and cached as R objects for efficiency. The current version of the R-GRASS interface is **rgrass**. In addition, an R function `initGRASS()` was written to permit GRASS to be started from within GRASS to which we will return below.
+The original R-GRASS interface [@bivand:00; @neteler+mitasova:08] was written mainly to permit R objects represented as **sp** class objects to be moved to GRASS, and GRASS objects to be moved to R for statistical analysis. From **spgrass6** 0.6-3 (April 2009) following a fruitful workshop at Queen's University, Belfast, the interface was re-written to use the `--interface-description` flag provided for each GRASS command, also used by the Python interface to GRASS commands. Command interface descriptions are parsed from XML and cached as R objects for efficiency. The current version of the R-GRASS interface is **rgrass**. In addition, an R function `initGRASS()` was written to permit GRASS to be started from within R to which we will return below.
 
 It is worth stating that the number of years that the current package maintainer can continue in that role is limited, and it would be excellent if the maintainer role is transferred at the latest during 2024 (that is, shortly after the retirement of **rgdal**, **rgeos** and **maptools**).
 
@@ -672,7 +672,7 @@ In https://rsbivand.github.io/geomed19-workshop/Geomed19_II.html, it was shown t
 buildings_4 <- buffer(buildings, width=-4)
 ```
 
-Next we rasterize the negative buffered buildings using `bbo-r` created above:
+Next we rasterize the negative buffered buildings using `bbo_r` created above:
 
 ```{r}
 buildings_4_r <- rasterize(buildings_4, bbo_r, field="cat")
@@ -731,7 +731,7 @@ The outcome is the same as the analysis above using GRASS.
 
 ## Open questions
 
-There are clearly numerous, and hopefully this session will both define others, and maybe recruit contributors to ones already identified.
+There are clearly numerous questions, and hopefully this session will both define others, and maybe recruit contributors to ones already identified.
 
 ### Continuous integration testing
 
