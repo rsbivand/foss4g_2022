@@ -497,24 +497,20 @@ and can be round-tripped:
 (r_sp_rt <- rast(st_as_stars(r_sp)))
 ```
 
-#### `"RasterLayer"`
+### `"RasterLayer"`
 
-As **rgdal** will retire soon, using **rgdal** in the **raster** package [@raster] is not a feasible way to coerce a `"SpatRaster"` object to a `"RasterLayer"` object. 
+*updated 2022-10-12 following publication of* **raster** *3.6-3 on CRAN.*
 
-```{r}
-tf <- tempfile(fileext=".grd")
-terra::writeRaster(r, filename=tf, filetype="RRASTER")
-```
-
-We can use a temporary file in the `"RRASTER"` format that `terra::writeRaster()` can write using GDAL, and `raster::raster()` can read using R code rather than GDAL:
+From version 3.6-3 the **raster** package [@raster] uses **terra** for all GDAL operations. Because of this, coercing a `"SpatRaster"` object to a `"RasterLayer"` object is simple:
 
 ```{r}
-library("raster")
+library(raster)
+(r_RL <- raster(r))
+```
+```{r}
+inMemory(r_RL)
 ```
 
-```{r}
-(r_RL <- raster(tf))
-```
 This object (held on file rather than in memory) can be round-tripped:
 
 ```{r}
